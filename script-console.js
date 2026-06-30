@@ -54,35 +54,68 @@ ${b[6]}|${b[7]}|${b[8]}`);
 
 
 function checkWin(player) {
-  const moves = player.moveList.toString();
+  const moves = player.moveList;
   for (let i = 0; i < winConditions.length; i++) {
-    if (moves.includes(i.toString())) {
-      playerX.score++;
-      console.log(`${playerX.name} wins!`);
+    let conditionMet = winConditions[i].every(element => moves.includes(element));
+    if (conditionMet) {
+      player.score++;
+      console.log(`${player.name} wins!`);
       printBoard(gameboard.getBoard());
       return true;
-      break;
-    }
-    else {
-      return false;
       break;
     }
   }
 }
 
 async function playerTurn(player) {
-  printBoard(gameboard.getBoard());
-  const move = await takeInput(`${player.name} (${player.marker}) choose cell: `);
-  if (Number(move) != NaN) {
-    gameboard.placeMarker(move, player.marker);
-    player.moveList.push(Number(move));
-    console.log("\n-----\n");
+  while (true) {
+    printBoard(gameboard.getBoard());
+    const move = await takeInput(`${player.name} (${player.marker}) choose cell (1-9): `);
+    if (Number(move) != NaN && 1 <= Number(move) <= 9) {
+      gameboard.placeMarker(move, player.marker);
+      player.moveList.push(Number(move));
+      console.log("-----");
+      break;
+    }
+    else {
+      console.log("Input invalid");
+    }
   }
-  checkWin(player);
+  return checkWin(player);
 }
+const printScore = (pX, pO) => console.log(`${pX.name} ${pX.score} - ${pO.score} ${pO.name}`);
 
 async function newGame() {
   const playerX = await createX(undefined, "X", [], 0);
   const playerO = await createX(undefined, "O", [], 0);
+  let turnCount = 0;
+  let xTurn;
+  let oTurn;
+  while (true) {
+    if (turnCount < 9) {
+      xTurn = await playerTurn(playerX);
+      turnCount++;
+      if (xTurn) {
+        printScore();
+        rl.close();
+        break;
+      }
+    }
+    if (turnCount < 9) {
+      oTurn = await playerTurn(playerO);
+      turnCount++;
+      if (oTurn) {
+        printScore();
+        rl.close();
+        break;
+      }
+    }
+    if (turnCount === 9 && !xTurn && !oTurn) {
+      console.log("Draw!");
+      printScore();
+      rl.close();
+      break;
+    }
+  }
 }
 newGame();
