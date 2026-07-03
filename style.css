@@ -1,19 +1,19 @@
 * {
   box-sizing: border-box;
   font-family: sans-serif;
+  font-weight: bold;
   margin: 0;
   padding: 0;
 }
 :root {
   --accentclr: #154935;
   --accentclr2: #365d4e;
-  --fontclr: #66e7b5;
-  --fontclr2: #a9e0cb;
+  --fontclr: #7bffcc;
+  --fontclr2: #84b1a0;
   --smallfont: 1rem;
   --medfont: 1.2rem;
   --largefont: 2rem;
 }
-
 body {
   width: 100vw;
   height: 100vh;
@@ -24,6 +24,11 @@ body {
   height: 100%;
   margin: 0 auto;
 }
+main {
+  height: 75%;
+}
+
+/* Header */
 header {
   height: 10%;
   padding: 15px;
@@ -38,6 +43,7 @@ header a {
   color: var(--accentclr);
 }
 
+/* Scoreboard */
 #info {
   background-color: var(--accentclr);
   height: 15%;
@@ -49,7 +55,6 @@ header a {
 .playerinfo {
   color: var(--fontclr);
   text-align: center;
-  font-weight: bold;
 }
 .pname {
   font-size: var(--medfont);
@@ -59,4 +64,55 @@ header a {
 }
 #msgbox {
   color: var(--fontclr2);
+}
+
+/* Player forms */
+form {
+  height: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  color: var(--accentclr);
+  font-size: medium;
+}
+.playerform *:not(input[type="radio"]){
+  margin-right: 5px;
+}
+input[type="text"] {
+  width: 300px;
+  height: 35px;
+  outline: none;
+  border: 3px solid var(--accentclr);
+  border-radius: 10px;
+  text-align: center;
+  background-color: var(--accentclr2);
+  color: var(--fontclr);
+  margin-bottom: 15px;
+  transition: 0.5s background-color, border-color;
+}
+input[type="text"]:focus {
+  background-color: var(--fontclr2);
+  border-color: var(--fontclr);
+  transition: 0.5s background-color, border-color;
+}
+input[type="radio"] {
+  accent-color: var(--accentclr);
+}
+#btnstart {
+  width: 15%;
+  height: 10%;
+  outline: none;
+  color: var(--fontclr);
+  background-color: var(--accentclr2);
+  border: 3px solid var(--accentclr);
+  border-radius: 5px;
+  transition: 0.5s background-color, border-color;
+}
+#btnstart:hover,
+#btnstart:focus {
+  transform: scale(1.1);
+  background-color: var(--fontclr2);
+  border-color: var(--fontclr);
+  transition: 0.2s transform, background-color, border-color;
 }
