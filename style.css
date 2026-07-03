@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --accentclr: #154935;
+  --accentclr2: #365d4e;
+  --fontclr: #66e7b5;
+  --fontclr2: #a9e0cb;
+  --smallfont: 1rem;
+  --medfont: 1.2rem;
+  --largefont: 2rem;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to top, var(--accentclr), var(--fontclr2));
+}
+#wrapper {
+  width: 60%;
+  height: 100%;
+  margin: 0 auto;
+}
+header {
+  height: 10%;
+  padding: 15px;
+  font-size: var(--largefont);
+  font-weight: bolder;
+  text-align: center;
+  align-content: center;
+  margin-bottom: 20px;
+}
+header a {
+  text-decoration: none;
+  color: var(--accentclr);
+}
+
+#info {
+  background-color: var(--accentclr);
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 110px;
+}
+.playerinfo {
+  color: var(--fontclr);
+  text-align: center;
+  font-weight: bold;
+}
+.pname {
+  font-size: var(--medfont);
+}
+.pscore {
+  font-size: var(--largefont);
+}
+#msgbox {
+  color: var(--fontclr2);
+}
