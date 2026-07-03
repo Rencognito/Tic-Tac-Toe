@@ -28,9 +28,9 @@ const gameboard = (() => {
   const placeMarker = (target, marker) => {
     if (target != "") {
       if (marker == "X") board[target - 1] = "X";
-      else if (marker = "O") board[target - 1] = "O";
+      else if ((marker = "O")) board[target - 1] = "O";
     }
-  }
+  };
   return { getBoard, placeMarker };
 })();
 
@@ -42,21 +42,21 @@ const winConditions = [
   [2, 5, 8],
   [3, 6, 9],
   [1, 5, 9],
-  [3, 5, 7]
+  [3, 5, 7],
 ];
-
 
 function printBoard(b) {
   console.log(`${b[0]}|${b[1]}|${b[2]}
 ${b[3]}|${b[4]}|${b[5]}
-${b[6]}|${b[7]}|${b[8]}`);  
+${b[6]}|${b[7]}|${b[8]}`);
 }
-
 
 function checkWin(player) {
   const moves = player.moveList;
   for (let i = 0; i < winConditions.length; i++) {
-    let conditionMet = winConditions[i].every(element => moves.includes(element));
+    let conditionMet = winConditions[i].every((element) =>
+      moves.includes(element),
+    );
     if (conditionMet) {
       player.score++;
       console.log(`${player.name} wins!`);
@@ -70,20 +70,22 @@ function checkWin(player) {
 async function playerTurn(player) {
   while (true) {
     printBoard(gameboard.getBoard());
-    const move = await takeInput(`${player.name} (${player.marker}) choose cell (1-9): `);
+    const move = await takeInput(
+      `${player.name} (${player.marker}) choose cell (1-9): `,
+    );
     if (Number(move) != NaN && 1 <= Number(move) <= 9) {
       gameboard.placeMarker(move, player.marker);
       player.moveList.push(Number(move));
       console.log("-----");
       break;
-    }
-    else {
+    } else {
       console.log("Input invalid");
     }
   }
   return checkWin(player);
 }
-const printScore = (pX, pO) => console.log(`${pX.name} ${pX.score} - ${pO.score} ${pO.name}`);
+const printScore = (pX, pO) =>
+  console.log(`${pX.name}:${pX.score} - ${pO.score}:${pO.name}`);
 
 async function newGame() {
   const playerX = await createX(undefined, "X", [], 0);
