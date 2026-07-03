@@ -47,6 +47,7 @@ header a {
 #info {
   background-color: var(--accentclr);
   height: 15%;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +77,7 @@ form {
   color: var(--accentclr);
   font-size: medium;
 }
-.playerform *:not(input[type="radio"]){
+.playerform *:not(input[type="radio"]) {
   margin-right: 5px;
 }
 input[type="text"] {
@@ -89,12 +90,16 @@ input[type="text"] {
   background-color: var(--accentclr2);
   color: var(--fontclr);
   margin-bottom: 15px;
-  transition: 0.5s background-color, border-color;
+  transition:
+    0.5s background-color,
+    border-color;
 }
 input[type="text"]:focus {
   background-color: var(--fontclr2);
   border-color: var(--fontclr);
-  transition: 0.5s background-color, border-color;
+  transition:
+    0.5s background-color,
+    border-color;
 }
 input[type="radio"] {
   accent-color: var(--accentclr);
@@ -107,12 +112,29 @@ input[type="radio"] {
   background-color: var(--accentclr2);
   border: 3px solid var(--accentclr);
   border-radius: 5px;
-  transition: 0.5s background-color, border-color;
+  transition:
+    0.5s background-color,
+    border-color;
 }
 #btnstart:hover,
 #btnstart:focus {
   transform: scale(1.1);
   background-color: var(--fontclr2);
   border-color: var(--fontclr);
-  transition: 0.2s transform, background-color, border-color;
+  transition:
+    0.2s transform,
+    background-color,
+    border-color;
+}
+
+/* Game board */
+.board {
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.cell {
+  width: 100px;
+  height: 100px;
+  border: 3px solid var(--accentclr);
 }
