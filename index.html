@@ -14,12 +14,12 @@
       <header><a href="index.html">Tic Tac Toe</a></header>
       <section id="info">
         <div class="playerinfo">
-          <p class="pname" id="p1name">Player 1</p>
+          <p class="pname" id="p1n">Player 1</p>
           <p class="pscore" id="p1score">0</p>
         </div>
         <div id="msgbox"></div>
         <div class="playerinfo">
-          <p class="pname" id="p2name">Player 2</p>
+          <p class="pname" id="p2n">Player 2</p>
           <p class="pscore" id="p2score">0</p>
         </div>
       </section>
@@ -28,14 +28,14 @@
           <div class="playerform">
             <span>Player 1: </span>
             <input type="text" id="p1name" placeholder="Enter player name" maxlength="20" autofocus>
-            <label for="p1x"><input id="p1x" type="radio" name="p1" value="X"> X</label>
+            <label for="p1x"><input id="p1x" type="radio" name="p1" value="X" checked> X</label>
             <label for="p1o"><input id="p1o" type="radio" name="p1" value="O"> O</label>
           </div>
           <div class="playerform">
             <span>Player 2: </span>
             <input type="text" id="p2name" placeholder="Enter player name" maxlength="20">
             <label for="p2x"><input id="p2x" type="radio" name="p2" value="X"> X</label>
-            <label for="p2o"><input id="p2o" type="radio" name="p2" value="O"> O</label>
+            <label for="p2o"><input id="p2o" type="radio" name="p2" value="O" checked> O</label>
           </div>
           <button id="btnstart" type="submit">Start</button>
         </form>

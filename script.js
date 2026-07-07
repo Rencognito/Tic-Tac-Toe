@@ -1,6 +1,31 @@
-const txtName1 = document.querySelector("#p1name");
-const txtName2 = document.querySelector("#p2name");
 const msgBox = document.querySelector("#msgbox");
+
+function createPlayer(event) {
+  const name1 = document.querySelector("#p1name").value;
+  const name2 = document.querySelector("#p2name").value;
+  const p1Marker = document.querySelector('input[name="p1"]:checked')?.value;
+  const p2Marker = document.querySelector('input[name="p2"]:checked')?.value;
+  if (name1.trim() != "" && name2.trim() != "" && p1Marker !== p2Marker) {
+    return {
+      player1: {
+        name: name1,
+        marker: p1Marker,
+        moveList: [],
+        score: 0,
+      },
+      player2: {
+        name: name2,
+        marker: p2Marker,
+        moveList: [],
+        score: 0,
+      },
+    };
+  } else {
+    msgBox.textContent = "Enter in the requested values";
+    event.preventDefault();
+    return false;
+  }
+}
 
 const gameboard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -31,17 +56,16 @@ function renderBoard() {
   }
 }
 
-function newGame() {
-  renderBoard();
+function gameController(event) {
+  const players = createPlayer(event);
+  if (players) {
+    let p1 = createPlayer().player1;
+    let p2 = createPlayer().player2;
+    console.log(players);
+    renderBoard();
+  }
 }
 
-document.querySelector("#btnstart").addEventListener("click", (event) => {
-  const p1checked = document.querySelector('input[name="p1"]:checked');
-  const p2checked = document.querySelector('input[name="p2"]:checked');
-  if (txtName1.value != "" && txtName1.value != "" && p1checked && p2checked)
-    newGame();
-  else {
-    event.preventDefault();
-    msgBox.textContent = "Enter in all requested values.";
-  }
+document.querySelector("#btnstart").addEventListener("click", (e) => {
+  gameController(e);
 });
