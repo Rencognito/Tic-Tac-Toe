@@ -1,5 +1,6 @@
 const msgBox = document.querySelector("#msgbox");
 let currentPlayer;
+let players = null;
 
 const gameboard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -43,7 +44,7 @@ function displayController() {
 
   const updateScore = (p1, p2) => {
     document.querySelector("#p1score").textContent = p1.score;
-    document.querySelector("#p1score").textContent = p2.score;
+    document.querySelector("#p2score").textContent = p2.score;
   };
 
   return { renderBoard, placeMarker, updateNames, updateScore };
@@ -89,53 +90,57 @@ function gameController() {
   };
 
   const playerTurn = (cell) => {
-    msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
+    if (!currentPlayer || !players) return;
+
     if (cell.textContent === "") {
-      currentPlayer.moveList.push(Number(cell.id));
+      const move = Number(cell.id);
+      currentPlayer.moveList.push(move);
       displayController().placeMarker(cell, currentPlayer.marker);
       console.log(currentPlayer.moveList);
-      checkWin();
+      if (checkWin()) {
+        displayController().updateScore(players.player1, players.player2);
+      }
     }
   };
 
   const checkWin = () => {
-    const moves = currentPlayer.moveList;
     for (let i = 0; i < winConditions.length; i++) {
-      const conditionMet = winConditions[i].every((element) => {
-        moves.includes(element);
-      });
+      const conditionMet = winConditions[i].every((element) =>
+        currentPlayer.moveList.includes(element),
+      );
       if (conditionMet) {
         currentPlayer.score++;
         msgBox.textContent = `${currentPlayer.name} wins!`;
         return true;
       }
     }
+    return false;
   };
 
   const newGame = (event) => {
-    const players = createPlayer(event);
-    if (players) {
-      let p1 = players.player1,
-        p2 = players.player2,
-        turnCount = 0;
+    const createdPlayers = createPlayer(event);
+    if (createdPlayers) {
+      players = createdPlayers;
+      const p1 = players.player1;
+      const p2 = players.player2;
       displayController().updateNames(p1, p2);
       displayController().renderBoard();
       currentPlayer = p1;
-      if (playerTurn(currentPlayer)) {
-        displayController().updateScore();
-      }
+      msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
     }
   };
 
-  return { createPlayer, playerTurn, newGame };
+  return { winConditions, createPlayer, playerTurn, checkWin, newGame };
 }
 
+const game = gameController();
+
 document.querySelector("main").addEventListener("click", (e) => {
-  if (e.target.classList.contains("cell")) {
-    gameController().playerTurn(e.target);
+  if (e.target.classList.contains("cell") && !game.checkWin()) {
+    game.playerTurn(e.target);
   }
 });
 
 document.querySelector("#btnstart").addEventListener("click", (e) => {
-  gameController().newGame(e);
+  game.newGame(e);
 });
