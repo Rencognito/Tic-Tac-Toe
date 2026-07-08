@@ -1,5 +1,5 @@
 const msgBox = document.querySelector("#msgbox");
-let inputtedCell, currentPlayer;
+let currentPlayer;
 
 const gameboard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -15,13 +15,6 @@ const gameboard = (() => {
 })();
 
 function displayController() {
-  document.querySelector("main").addEventListener("click", (e) => {
-    if (e.target.classList.contains("cell")) {
-      inputtedCell = e.target.id;
-      displayController().placeMarker(e.target, currentPlayer.marker);
-    }
-  });
-
   const renderBoard = () => {
     const board = gameboard.getBoard();
     const main = document.querySelector("main");
@@ -57,6 +50,17 @@ function displayController() {
 }
 
 function gameController() {
+  const winConditions = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7],
+  ];
+
   const createPlayer = (event) => {
     const name1 = document.querySelector("#p1name").value,
       name2 = document.querySelector("#p2name").value,
@@ -84,8 +88,28 @@ function gameController() {
     }
   };
 
-  const playerTurn = (player) => {
-    msgBox.textContent = `Your turn, ${player.name} (${player.marker})`;
+  const playerTurn = (cell) => {
+    msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
+    if (cell.textContent === "") {
+      currentPlayer.moveList.push(Number(cell.id));
+      displayController().placeMarker(cell, currentPlayer.marker);
+      console.log(currentPlayer.moveList);
+      checkWin();
+    }
+  };
+
+  const checkWin = () => {
+    const moves = currentPlayer.moveList;
+    for (let i = 0; i < winConditions.length; i++) {
+      const conditionMet = winConditions[i].every((element) => {
+        moves.includes(element);
+      });
+      if (conditionMet) {
+        currentPlayer.score++;
+        msgBox.textContent = `${currentPlayer.name} wins!`;
+        return true;
+      }
+    }
   };
 
   const newGame = (event) => {
@@ -95,15 +119,22 @@ function gameController() {
         p2 = players.player2,
         turnCount = 0;
       displayController().updateNames(p1, p2);
-
       displayController().renderBoard();
       currentPlayer = p1;
-      playerTurn(currentPlayer);
+      if (playerTurn(currentPlayer)) {
+        displayController().updateScore();
+      }
     }
   };
 
-  return { createPlayer, newGame };
+  return { createPlayer, playerTurn, newGame };
 }
+
+document.querySelector("main").addEventListener("click", (e) => {
+  if (e.target.classList.contains("cell")) {
+    gameController().playerTurn(e.target);
+  }
+});
 
 document.querySelector("#btnstart").addEventListener("click", (e) => {
   gameController().newGame(e);

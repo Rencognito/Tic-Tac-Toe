@@ -85,7 +85,7 @@ async function playerTurn(player) {
   return checkWin(player);
 }
 const printScore = (pX, pO) =>
-  console.log(`${pX.name}:${pX.score} - ${pO.score}:${pO.name}`);
+  console.log(`${pX.name}-${pX.score} | ${pO.score}-${pO.name}`);
 
 async function newGame() {
   const playerX = await createX(undefined, "X", [], 0);
@@ -98,7 +98,7 @@ async function newGame() {
       xTurn = await playerTurn(playerX);
       turnCount++;
       if (xTurn) {
-        printScore();
+        printScore(playerX, playerO);
         rl.close();
         break;
       }
@@ -107,7 +107,7 @@ async function newGame() {
       oTurn = await playerTurn(playerO);
       turnCount++;
       if (oTurn) {
-        printScore();
+        printScore(playerX, playerO);
         rl.close();
         break;
       }
