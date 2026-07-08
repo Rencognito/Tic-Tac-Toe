@@ -10,7 +10,6 @@
   --accentclr2: #42715f;
   --fontclr: #7bffcc;
   --fontclr2: #84b1a0;
-  --smallfont: 1rem;
   --medfont: 1.2rem;
   --largefont: 2rem;
 }
@@ -147,6 +146,11 @@ input[type="radio"] {
   height: calc(100% / 3);
   border: 2px solid var(--accentclr);
   background-color: var(--accentclr2);
+  color: var(--accentclr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
 }
 .cell:hover {
   background-color: var(--fontclr2);
