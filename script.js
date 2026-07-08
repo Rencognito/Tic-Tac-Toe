@@ -1,4 +1,5 @@
 const msgBox = document.querySelector("#msgbox");
+let inputtedCell, currentPlayer;
 
 const gameboard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -14,6 +15,13 @@ const gameboard = (() => {
 })();
 
 function displayController() {
+  document.querySelector("main").addEventListener("click", (e) => {
+    if (e.target.classList.contains("cell")) {
+      inputtedCell = e.target.id;
+      displayController().placeMarker(e.target, currentPlayer.marker);
+    }
+  });
+
   const renderBoard = () => {
     const board = gameboard.getBoard();
     const main = document.querySelector("main");
@@ -35,11 +43,20 @@ function displayController() {
     if (target.textContent === "") target.textContent = marker;
   };
 
-  return { renderBoard, placeMarker };
+  const updateNames = (p1, p2) => {
+    document.querySelector("#p1n").textContent = p1.name;
+    document.querySelector("#p2n").textContent = p2.name;
+  };
+
+  const updateScore = (p1, p2) => {
+    document.querySelector("#p1score").textContent = p1.score;
+    document.querySelector("#p1score").textContent = p2.score;
+  };
+
+  return { renderBoard, placeMarker, updateNames, updateScore };
 }
 
 function gameController() {
-  let inputtedCell, currentPlayer;
   const createPlayer = (event) => {
     const name1 = document.querySelector("#p1name").value,
       name2 = document.querySelector("#p2name").value,
@@ -67,12 +84,6 @@ function gameController() {
     }
   };
 
-  document.querySelector("main").addEventListener("click", (e) => {
-    if (e.target.classList.contains("cell")) {
-      inputtedCell = e.target.id;
-      displayController().placeMarker(e.target, currentPlayer.marker);
-    }
-  });
   const playerTurn = (player) => {
     msgBox.textContent = `Your turn, ${player.name} (${player.marker})`;
   };
@@ -83,7 +94,8 @@ function gameController() {
       let p1 = players.player1,
         p2 = players.player2,
         turnCount = 0;
-      console.log(p1, p2);
+      displayController().updateNames(p1, p2);
+
       displayController().renderBoard();
       currentPlayer = p1;
       playerTurn(currentPlayer);
