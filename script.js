@@ -1,6 +1,7 @@
 const msgBox = document.querySelector("#msgbox");
 let currentPlayer;
 let players = null;
+let didWin = false;
 
 const gameboard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -91,13 +92,20 @@ function gameController() {
 
   const playerTurn = (cell) => {
     if (!currentPlayer || !players) return;
-
+    
     if (cell.textContent === "") {
       const move = Number(cell.id);
       currentPlayer.moveList.push(move);
       displayController().placeMarker(cell, currentPlayer.marker);
       console.log(currentPlayer.moveList);
-      if (checkWin()) {
+      if (!checkWin()) {
+        currentPlayer =
+          currentPlayer === players.player1 ? players.player2 : players.player1;
+          msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
+      } else {
+        didWin = true;
+        msgBox.textContent = `${currentPlayer.name} wins!`;
+        currentPlayer.score++;
         displayController().updateScore(players.player1, players.player2);
       }
     }
@@ -109,8 +117,6 @@ function gameController() {
         currentPlayer.moveList.includes(element),
       );
       if (conditionMet) {
-        currentPlayer.score++;
-        msgBox.textContent = `${currentPlayer.name} wins!`;
         return true;
       }
     }
@@ -130,13 +136,13 @@ function gameController() {
     }
   };
 
-  return { winConditions, createPlayer, playerTurn, checkWin, newGame };
+  return { createPlayer, playerTurn, checkWin, newGame };
 }
 
 const game = gameController();
 
 document.querySelector("main").addEventListener("click", (e) => {
-  if (e.target.classList.contains("cell") && !game.checkWin()) {
+  if (e.target.classList.contains("cell") && !didWin) {
     game.playerTurn(e.target);
   }
 });
