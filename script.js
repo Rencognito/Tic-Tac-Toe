@@ -13,13 +13,20 @@ const gameboard = (() => {
       else if ((marker = "O")) board[target - 1] = "O";
     }
   };
-  return { getBoard, placeMarker };
+
+  const resetBoard = () => {
+    for (let i = 0; i < board.length; i++) {
+      board[i] = "";
+    }
+  };
+
+  return { getBoard, placeMarker, resetBoard };
 })();
 
 function displayController() {
+  const main = document.querySelector("main");
   const renderBoard = () => {
     const board = gameboard.getBoard();
-    const main = document.querySelector("main");
     const gbContainer = document.createElement("div");
 
     main.innerHTML = "";
@@ -48,7 +55,20 @@ function displayController() {
     document.querySelector("#p2score").textContent = p2.score;
   };
 
-  return { renderBoard, placeMarker, updateNames, updateScore };
+  const endGame = () => {
+    if (didWin) {
+      const btnHome = document.createElement("button");
+      const btnNewGame = document.createElement("button");
+      btnHome.id = "btnhome";
+      btnNewGame.id = "btnnewgame";
+      btnHome.textContent = "Return to Menu";
+      btnNewGame.textContent = "Start New Game";
+      main.insertBefore(btnHome, main.children[0]);
+      main.appendChild(btnNewGame);
+    }
+  };
+
+  return { renderBoard, placeMarker, updateNames, updateScore, endGame };
 }
 
 function gameController() {
@@ -92,7 +112,7 @@ function gameController() {
 
   const playerTurn = (cell) => {
     if (!currentPlayer || !players) return;
-    
+
     if (cell.textContent === "") {
       const move = Number(cell.id);
       currentPlayer.moveList.push(move);
@@ -101,12 +121,13 @@ function gameController() {
       if (!checkWin()) {
         currentPlayer =
           currentPlayer === players.player1 ? players.player2 : players.player1;
-          msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
+        msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
       } else {
         didWin = true;
         msgBox.textContent = `${currentPlayer.name} wins!`;
         currentPlayer.score++;
         displayController().updateScore(players.player1, players.player2);
+        displayController().endGame();
       }
     }
   };
@@ -124,6 +145,18 @@ function gameController() {
   };
 
   const newGame = (event) => {
+    if (players) {
+      players.player1.moveList = [];
+      players.player2.moveList = [];
+      didWin = false;
+      gameboard.resetBoard();
+      displayController().updateScore(players.player1, players.player2);
+      displayController().renderBoard();
+      currentPlayer = players.player1;
+      msgBox.textContent = `Your turn, ${currentPlayer.name} (${currentPlayer.marker})`;
+      return;
+    }
+
     const createdPlayers = createPlayer(event);
     if (createdPlayers) {
       players = createdPlayers;
@@ -145,6 +178,8 @@ document.querySelector("main").addEventListener("click", (e) => {
   if (e.target.classList.contains("cell") && !didWin) {
     game.playerTurn(e.target);
   }
+  else if (e.target.id === "btnhome") location.reload();
+  else if (e.target.id === "btnnewgame") game.newGame();
 });
 
 document.querySelector("#btnstart").addEventListener("click", (e) => {
